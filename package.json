@@ -1,0 +1,13 @@
+{
+    "dependencies": {
+      "body-parser": "1.18.2",
+      "express": "4.10.2",
+      "express-basic-auth": "^1.1.4",
+      "express-fileupload": "0.3.0",
+      "extend": "*",
+      "morgan": "*",
+      "q": "*",
+      "x509": "0.3.2"
+    }
+  }
+  
