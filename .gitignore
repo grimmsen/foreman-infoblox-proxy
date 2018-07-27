@@ -1,2 +1,2 @@
-conf/config.json
-node_modules
+src/conf/config.json
+src/node_modules
