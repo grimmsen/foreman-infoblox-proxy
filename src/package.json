@@ -6,8 +6,7 @@
       "express-fileupload": "0.3.0",
       "extend": "*",
       "morgan": "*",
-      "q": "*",
-      "x509": "0.3.2"
+      "q": "*"
     }
   }
   

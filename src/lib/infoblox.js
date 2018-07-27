@@ -30,7 +30,8 @@ var infoblox = function(conf) {
     	};
     	const req = https.request(options, function (res) {
     		const statusCode = res.statusCode;
-    		var rawData="";
+			var rawData="";
+			var parsedData="";
     		if(statusCode>299) { 
                 callback(null);
     		} else {
@@ -42,7 +43,7 @@ var infoblox = function(conf) {
     		});
     		res.on('end',function() {
                 try {
-                    const parsedData=JSON.parse(rawData);
+                    parsedData=JSON.parse(rawData);
                 } catch (e) {
                     callback(null);
                 }
