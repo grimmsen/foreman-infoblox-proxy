@@ -1,6 +1,6 @@
 FROM node:8
 EXPOSE 8080
-WORKDIR /
+WORKDIR /foreman-infoblox-proxy
+ADD src /foreman-infoblox-proxy
 RUN npm install
-COPY . .
 CMD [ "npm","start" ]
