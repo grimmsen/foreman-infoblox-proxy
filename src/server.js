@@ -54,11 +54,11 @@ app.route('/dns/:value')
   .delete(dns.delete);
 
 try {
-  var privateKey  = fs.readFileSync('data/conf/ssl.key', 'utf8');
-  var certificate = fs.readFileSync('data/conf/ssl.pem', 'utf8');
+  var privateKey  = fs.readFileSync('conf/ssl.key', 'utf8');
+  var certificate = fs.readFileSync('conf/ssl.pem', 'utf8');
   var credentials = {key: privateKey, cert: certificate};
   var httpsServer = https.createServer(credentials, app);
-  httpsServer.listen(9443);
+  httpsServer.listen(8443);
 } catch (e) {
   app.listen(8080)
 }
