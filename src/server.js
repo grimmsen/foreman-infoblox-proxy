@@ -59,8 +59,11 @@ try {
   var credentials = {key: privateKey, cert: certificate};
   var httpsServer = https.createServer(credentials, app);
   httpsServer.listen(8443);
+  console.log("Listening on 8443");
 } catch (e) {
-  app.listen(8080)
+  console.log("SSL startup failed "+e);
+  console.log("Listening on 8080");
+  app.listen(8080);
 }
 
 process.on('uncaughtException', function (err) {
