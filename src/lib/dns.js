@@ -32,6 +32,24 @@ var dns = function() {
         }
     }
 
+    this.deleteA = function(req,res) {
+        if(util.is_fqdn(req.params.value)) {
+            infoblox.request('record:a','GET',{name:req.params.value},[],function(data) {
+                for(var c=0; c<data.length; c++) {
+                    if(data[c]._ref.indexOf("record:")===0) {
+                        infoblox.request(data[c]._ref,'DELETE',[],[],function (data) {
+                            if(data===null) { res.send(500).end(); return; }
+                            return;
+                        });
+                    }
+                }
+                res.status(200).end(); return;
+            });
+        } else {
+            res.status(500).end();
+        }
+    }
+
     this.delete = function(req,res) {
         if(util.is_ptr(req.params.value)) {
             infoblox.request('record:ptr','GET',

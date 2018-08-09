@@ -53,6 +53,9 @@ app.route('/dns')
 app.route('/dns/:value')
   .delete(dns.delete);
 
+app.route('/dns/:value/A')
+  .delete(dns.deleteA);
+
 try {
   var privateKey  = fs.readFileSync('conf/ssl.key', 'utf8');
   var certificate = fs.readFileSync('conf/ssl.pem', 'utf8');
