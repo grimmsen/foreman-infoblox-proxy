@@ -117,7 +117,7 @@ var dhcp = function() {
     // Method: GET
     // /dhcp/192.168.2.0/mac/00:11:22:33:44:55
     this.search_mac = function(req,res) {
-        if(!util.is_mac(req.params.mac)||!util.is_ip(req.params.ip)) {
+        if(!util.is_mac(req.params.mac)||!util.is_ip(req.params.network)) {
             res.send(500).end(); return;
         }
         infoblox.request('network','GET',{contains_address:req.params.network},[],function (data) {
