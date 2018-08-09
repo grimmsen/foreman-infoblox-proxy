@@ -22,6 +22,7 @@ var dhcp = function() {
     this.dhcp = function(req,res) {
         infoblox.request('network','GET',[],[],function(data) {
             if(data==null) { res.status(500).end(); return; }
+            console.log(data);
             response ='[';
             for(var c=0; c<data.length; c++) {
                 var netmask = CIDRToNetmask(data[c].network.split('/')[1]);
@@ -93,6 +94,10 @@ var dhcp = function() {
         });
     }
 
+    this.autocreate = function(req,res) {
+        res.send(ok);
+    }
+    
     // Method: DELETE
     // /dhcp/102.168.2.0/mac/00:11:22:33:44
     this.delete_reservation = function(req,res) {

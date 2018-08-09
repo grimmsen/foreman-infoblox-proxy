@@ -56,12 +56,18 @@ app.route('/dns/:value')
 app.route('/dns/:value/A')
   .delete(dns.deleteA);
 
+app.route('/autocreate/:networkname/:name')
+  .post(dns.autocreate);
+  
+app.route('/')
+
 try {
   var privateKey  = fs.readFileSync('conf/ssl.key', 'utf8');
   var certificate = fs.readFileSync('conf/ssl.pem', 'utf8');
   var credentials = {key: privateKey, cert: certificate};
   var httpsServer = https.createServer(credentials, app);
   httpsServer.listen(8443);
+  app.listen(8080,'localhost'); // for internal com
   console.log("Listening on 8443");
 } catch (e) {
   console.log("SSL startup failed "+e);

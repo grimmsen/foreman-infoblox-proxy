@@ -1,5 +1,6 @@
 const _infoblox = require('./infoblox.js');
 const _util = require('./util.js');
+const request = require('request');
 
 var dns = function() {
     var infoblox = new _infoblox();
@@ -82,6 +83,36 @@ var dns = function() {
             return;
         }
         res.status(500).end();
+    }
+
+    // convinience function for simplified creation of host entries for hosts not managed by foreman
+    this.autocreate = function(req,res) {
+        infoblox.request('network','GET',{'comment:~':req.params.networkname},[],function(data) {
+            console.log(data[0].network);
+            if(data[0]._ref !== undefined) {
+                // CALLBACK HELL!!!
+                // find unused ip
+                request('http://localhost:8080/dhcp/'+data[0].network.split('/')[0]+'/unused_ip',function(err,response,body) {
+                    console.log("asdasd"+body);
+                    try {
+                        var ip = JSON.parse(body).ip;
+                        console.log(ip);
+                        // create A record
+                        request.post('http://localhost:8080/dns',{form:{fqdn:req.params.name,value:ip,type:'A'}},function(err,response,body) {
+                            if(err) {
+                                res.status(500).send('error on reservation');
+                                return;
+                            }
+                            res.status(200).send(ip);
+                        });
+                    } catch (e) {
+                        res.status(500).send('invalid data from ipam'+e).end();
+                    }
+                });
+            } else {
+                res.status(500).send("no such network").end();
+            }
+        });
     }
 }
 
