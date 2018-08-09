@@ -35,6 +35,7 @@ var dhcp = function() {
 
     // Method: GET
     // /dhcp/192.168.2.0/unused_ip
+    // Don't forget from/to: /dhcp/10.1.232.0/unused_ip?from=10.1.232.4&to=10.1.232.200
     this.unused_ip = function(req,res) {
         if(!util.is_ip(req.params.network)) { res.status(500).end(); return; }
         infoblox.request('ipv4address','GET',{network:req.params.network,status:'UNUSED'},[],function(data) {
