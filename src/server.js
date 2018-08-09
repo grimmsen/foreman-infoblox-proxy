@@ -58,9 +58,10 @@ app.route('/dns/:value/A')
 
 app.route('/autocreate/:networkname/:name')
   .post(dns.autocreate);
-  
+
 app.route('/')
 
+console.log("starting up....");
 try {
   var privateKey  = fs.readFileSync('conf/ssl.key', 'utf8');
   var certificate = fs.readFileSync('conf/ssl.pem', 'utf8');
