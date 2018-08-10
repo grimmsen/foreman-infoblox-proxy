@@ -15,7 +15,8 @@ process.env['NODE_TLS_REJECT_UNAUTHORIZED']='0';
 const app = express();
 app.use(morgan('combined'));
 app.use(bodyParser.urlencoded({extended:true}));
-app.use(function (err,req,res,next) {
+app.use(function (req,res,next) {
+  console.log(allowedips);
   if(allowedips===undefined) next();
   else {
     if(allowedips.indexOf(req.ip)>=0) next();
