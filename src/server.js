@@ -7,11 +7,21 @@ const fs=require("fs");
 const https=require("https");
 const extend=require("extend");
 
+const mojosecret = JSON.parse(fs.readFileSync('conf/config.json')).mojosecret;
+const allowedips = JSON.parse(fs.readFileSync('conf/config.json')).allowedips;
+
 process.env['NODE_TLS_REJECT_UNAUTHORIZED']='0';
 
 const app = express();
 app.use(morgan('combined'));
 app.use(bodyParser.urlencoded({extended:true}));
+app.use(function (err,req,res,next) {
+  if(allowedips===undefined) next();
+  else {
+    if(allowedips.indexOf(req.ip)>=0) next();
+    else res.status(401).send('not authorized').end();
+  }
+});
 
 const _dhcp = require('./lib/dhcp.js');
 const dhcp = new _dhcp();
@@ -56,10 +66,9 @@ app.route('/dns/:value')
 app.route('/dns/:value/A')
   .delete(dns.deleteA);
 
-app.route('/autocreate/:networkname/:name')
-  .post(dns.autocreate);
-
-app.route('/')
+app.route('/'+mojosecret+'/auto/:networkname/:value')
+  .put(dns.autocreate)
+  .delete(dns.deleteA);
 
 console.log("starting up....");
 try {
