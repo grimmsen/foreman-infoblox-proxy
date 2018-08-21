@@ -110,7 +110,7 @@ var dhcp = function() {
                     if(data1.length===0) {
                         res.status(500).end(); return;
                     }
-                    infoblox.request('ipv4address','GET',{ip_address:data.ipv4addr},[],function(data2) {
+                    infoblox.request('ipv4address','GET',{ip_address:data1[0].ipv4addr},[],function(data2) {
                         if(data2===null) {
                             res.status(500).end(); return;
                         }
