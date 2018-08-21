@@ -104,14 +104,14 @@ var dhcp = function() {
         infoblox.request('record:host','GET',{mac:req.params.mac},[],function(data) {
             if(data===null) { console.log("no data"); res.status(500).end(); return; }
             if(data.length===0) { 
-                console.log("no records"); 
+                console.log("no records");
                 infoblox.request('fixedaddress','GET',{mac:req.params.mac},[],function(data) {
                     if(data.length===0) {
                         res.status(500).end(); return;
                     }
                     var failure = 0;
                     for(var c=0; c<data.length; c++) {
-                        if(data[c]._ref.indexOf("record")===0) {
+                        if(data[c]._ref.indexOf("fixedaddress")===0) {
                             infoblox.request(data[c]._ref,"DELETE",[],[],function(data) {
                             if(data===null) failure++;
                             });
