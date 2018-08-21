@@ -114,7 +114,7 @@ var dhcp = function() {
                         if(data2===null) {
                             res.status(500).end(); return;
                         }
-                        infoblox.request(data2._ref,'DELETE',[],[],function(data3) {
+                        infoblox.request(data2[0]._ref,'DELETE',[],[],function(data3) {
                             if(data3===null) {
                                 res.status(500).end(); return;
                             }
