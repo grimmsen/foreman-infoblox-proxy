@@ -104,36 +104,22 @@ var dhcp = function() {
         infoblox.request('record:host','GET',{mac:req.params.mac},[],function(data) {
             if(data===null) { console.log("no data"); res.status(500).end(); return; }
             if(data.length===0) { 
-                // fixed address way
+                // try fixed address way
                 console.log("no records");
                 infoblox.request('fixedaddress','GET',{mac:req.params.mac},[],function(data) {
                     if(data.length===0) {
                         res.status(500).end(); return;
                     }
-                    var failure = 0;
-                    for(var c=0; c<data.length; c++) {
-                        // delete a records
-                        infoblox.request('record:a','GET',{ipv4addr:data[c].ipv4addr},[],function(data) {
-                            if(data[c]._ref.indexOf("record")===0) {
-                                infoblox.request(data[c]._ref,"DELETE",[],[],function(data) {
-                                    if(data===null) failure++;
-                                });
-                            }
-                        });
-                        // delete ptr records
-                        infoblox.request('record:ptr','GET',{ipv4addr:data[c].ipv4addr},[],function(data) {
-                            if(data[c]._ref.indexOf("record")===0) {
-                                infoblox.request(data[c]._ref,"DELETE",[],[],function(data) {
-                                    if(data===null) failure++;
-                                });
-                            }
-                        });
-                        if(data[c]._ref.indexOf("fixedaddress")===0) {
-                            infoblox.request(data[c]._ref,"DELETE",[],[],function(data) {
-                            if(data===null) failure++;
+                    infoblox.request('ipv4address','GET',{ip_address:data.ipv4addr},[],function(data) {
+                        for(var c=0; c<data.objects.length; c++) {
+                            // delete all associated objects
+                            infoblox.request(data.objects[c],'DELETE',[],function(data) {
+                                if(data===null) {
+                                    failure++;
+                                }
                             });
                         }
-                    }
+                    });
                 });
                 res.status(200).end(); return;
             }
