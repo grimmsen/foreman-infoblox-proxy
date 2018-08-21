@@ -106,19 +106,19 @@ var dhcp = function() {
             if(data.length===0) { 
                 // try fixed address way
                 console.log("no records");
-                infoblox.request('fixedaddress','GET',{mac:req.params.mac},[],function(data) {
-                    if(data.length===0) {
+                infoblox.request('fixedaddress','GET',{mac:req.params.mac},[],function(data1) {
+                    if(data1.length===0) {
                         res.status(500).end(); return;
                     }
-                    infoblox.request('ipv4address','GET',{ip_address:data.ipv4addr},[],function(data) {
-                        for(var c=0; c<data.objects.length; c++) {
-                            // delete all associated objects
-                            infoblox.request(data.objects[c],'DELETE',[],function(data) {
-                                if(data===null) {
-                                    failure++;
-                                }
-                            });
+                    infoblox.request('ipv4address','GET',{ip_address:data.ipv4addr},[],function(data2) {
+                        if(data2===null) {
+                            res.status(500).end(); return;
                         }
+                        infoblox.request(data2._ref,'DELETE',[],[],function(data3) {
+                            if(data3===null) {
+                                res.status(500).end(); return;
+                            }
+                        });
                     });
                 });
                 res.status(200).end(); return;
