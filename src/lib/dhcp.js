@@ -98,11 +98,28 @@ var dhcp = function() {
     // /dhcp/102.168.2.0/mac/00:11:22:33:44
     this.delete_reservation = function(req,res) {
         if(!util.is_mac(req.params.mac)||!util.is_ip(req.params.network)) {
+            console.log("address... malformed");
             res.status(500).end(); return;
         }
         infoblox.request('record:host','GET',{mac:req.params.mac},[],function(data) {
-            if(data===null) { res.status(500).end(); return; }
-            if(data.length===0) { res.status(500).end(); return; }
+            if(data===null) { console.log("no data"); res.status(500).end(); return; }
+            if(data.length===0) { 
+                console.log("no records"); 
+                infoblox.request('fixedaddress','GET',{mac:req.params.mac},[],function(data) {
+                    if(data.length===0) {
+                        res.status(500).end(); return;
+                    }
+                    var failure = 0;
+                    for(var c=0; c<data.length; c++) {
+                        if(data[c]._ref.indexOf("record")===0) {
+                            infoblox.request(data[c]._ref,"DELETE",[],[],function(data) {
+                            if(data===null) failure++;
+                            });
+                        }
+                    }
+                });
+                res.status(200).end(); return;
+            }
             var failure = 0;
             for(var c=0; c<data.length; c++) {
                 if(data[c]._ref.indexOf("record")===0) {

@@ -18,6 +18,8 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(function (req,res,next) {
   if(allowedips===undefined) next();
   else {
+    console.log(req.ip);
+    console.log(allowedips.indexOf(req.ip));
     if(allowedips.indexOf(req.ip)>=0) next();
     else res.status(401).send('not authorized').end();
   }
