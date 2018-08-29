@@ -99,6 +99,7 @@ var dns = function() {
                         // find unused ip
                         request('http://localhost:8080/dhcp/'+data[0].network.split('/')[0]+'/unused_ip',function(err,response,body) {
                             try {
+                                console.log(body);
                                 var ip = JSON.parse(body).ip;
                                 // create A record
                                 request.post('http://localhost:8080/dns',{form:{fqdn:req.params.value,value:ip,type:'A'}},function(err,response,body) {
