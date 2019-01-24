@@ -41,6 +41,7 @@ var infoblox = function(conf) {
     		});
     		res.on('end',function() {
                 try {
+		    console.log(rawData);
                     parsedData=JSON.parse(rawData);
                 } catch (e) {
                     callback(null);
