@@ -37,7 +37,7 @@ app.route('/features')
 
 app.route('/version')
   .get(function(req,res) {
-    res.send('{"version":"1.17.0","modules":{"dns":"1.17.0","dhcp":"1.17.0"}}').end();
+    res.send('{"version":"1.20.0","modules":{"dns":"1.20.0","dhcp":"1.20.0"}}').end();
   });
 
 app.route('/dhcp')
