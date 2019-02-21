@@ -176,17 +176,26 @@ var dhcp = function() {
             infoblox.request('record:host','GET',{'ipv4addr':req.params.ip},[],function (data) {
                 if(data===null) { res.status(500).end(); return; }
                 if(data.length===0) { res.send("[]").end(); return; }
-                var response = [{
-                    called: 'dhcp.search_ip',
-                    name: data[0].name,
-                    ip: data[0].ipv4addrs[0].ipv4addr,
-                    mac: data[0].ipv4addrs[0].mac,
-                    subnet: req.params.network+'/'+subnetmask,
-                    type: 'reservation',
-                    deletable: true,
-                    hostname: data[0].name
-                }]
-                res.status(200).send(response).end();
+                var response = [];
+                for(var c=0;c<data.length;c++) {
+                    if(data[c].ipv4addr[0].mac!==undefined) {
+                        response = [{
+                            called: 'dhcp.search_ip',
+                            name: data[c].name,
+                            ip: data[c].ipv4addrs[0].ipv4addr,
+                            mac: data[c].ipv4addrs[0].mac,
+                            subnet: req.params.network+'/'+subnetmask,
+                            type: 'reservation',
+                            deletable: true,
+                            hostname: data[c].name
+                        }];
+                    }
+                }
+                if(response.length>0) {
+                    res.status(200).send(response).end();
+                } else {
+                    res.status(500).end();
+                }
             });
         });
     }
