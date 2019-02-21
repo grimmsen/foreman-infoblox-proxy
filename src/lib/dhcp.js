@@ -179,7 +179,7 @@ var dhcp = function() {
                 var response = [];
                 for(var c=0;c<data.length;c++) {
                     if(data[c].ipv4addrs[0].mac!==undefined) {
-                        response = [{
+                        response.push({
                             called: 'dhcp.search_ip',
                             name: data[c].name,
                             ip: data[c].ipv4addrs[0].ipv4addr,
@@ -188,7 +188,7 @@ var dhcp = function() {
                             type: 'reservation',
                             deletable: true,
                             hostname: data[c].name
-                        }];
+                        });
                     }
                 }
                 if(response.length>0) {
