@@ -178,7 +178,7 @@ var dhcp = function() {
                 if(data.length===0) { res.send("[]").end(); return; }
                 var response = [];
                 for(var c=0;c<data.length;c++) {
-                    if(data[c].ipv4addr[0].mac!==undefined) {
+                    if(data[c].ipv4addrs[0].mac!==undefined) {
                         response = [{
                             called: 'dhcp.search_ip',
                             name: data[c].name,
