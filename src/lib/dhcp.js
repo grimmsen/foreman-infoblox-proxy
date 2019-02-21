@@ -177,6 +177,7 @@ var dhcp = function() {
                 if(data===null) { res.status(500).end(); return; }
                 if(data.length===0) { res.send("[]").end(); return; }
                 var response = [{
+                    called: 'dhcp.search_ip',
                     name: data[0].name,
                     ip: data[0].ipv4addrs[0].ipv4addr,
                     mac: data[0].ipv4addrs[0].mac,
