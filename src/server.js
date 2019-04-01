@@ -10,7 +10,7 @@ const extend=require("extend");
 try {
   const allowedips = JSON.parse(fs.readFileSync('conf/config.json')).allowedips;
   const dnsservers = JSON.parse(fs.readFileSync('conf/config.json')).dnsservers;
-catch (e) {
+} catch (e) {
   console.log(e);
 }
 
