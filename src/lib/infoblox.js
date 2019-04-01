@@ -5,7 +5,7 @@ const fs = require('fs');
 
 var infoblox = function(conf) {
 
-    const InfoBloxConf = JSON.parse(fs.readFileSync('../conf/config.json'));
+    const InfoBloxConf = JSON.parse(fs.readFileSync('conf/config.json'));
 
     function JSONToGET(args) {
     	var GET = "?"
