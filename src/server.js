@@ -68,7 +68,7 @@ app.route('/dns/:value')
 app.route('/dns/:value/A')
   .delete(dns.deleteA);
 
-app.route('/'+mojosecret+'/auto/:networkname/:value')
+app.route('/auto/:networkname/:value')
   .put(dns.autocreate)
   .delete(dns.deleteA);
 
