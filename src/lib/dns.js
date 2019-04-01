@@ -8,6 +8,7 @@ var dns = function(dnsservers) {
     var infoblox = new _infoblox();
     var util = new _util();
     var dnsservers = dnsservers;
+    var dnscache = {};
     this.create = function(req,res) {
         if(req.body.type==='PTR') {
             if(!util.is_fqdn(req.body.fqdn)||!util.is_ptr(req.body.value)) {
@@ -93,6 +94,11 @@ var dns = function(dnsservers) {
         infoblox.request('network','GET',{'comment:~':req.params.networkname},[],function(data) {
             if(data[0] !== undefined) {
                 // CALLBACK HELL!!!
+                // check cache
+                if(dnscache[req.params.value]!==undefined) {
+                  res.send(dnscache[req.params.value]).end();
+                  return;
+                }
                 if(dnsservers!==undefined) { dnshelper.setServers(dnsservers); console.log("Using "+dnsservers+" for resolving..."); }
                 dnshelper.resolve(req.params.value,function(err,records) {
                     if(records!==undefined) {
@@ -110,6 +116,7 @@ var dns = function(dnsservers) {
                                         res.status(500).send('error on reservation');
                                         return;
                                     }
+                                    dnscache[req.params.value]=ip;
                                     res.status(200).send(ip);
                                 });
                             } catch (e) {
