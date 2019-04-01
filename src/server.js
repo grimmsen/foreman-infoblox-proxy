@@ -8,11 +8,13 @@ const https=require("https");
 const extend=require("extend");
 
 try {
-  const allowedips = JSON.parse(fs.readFileSync('conf/config.json')).allowedips;
-  const dnsservers = JSON.parse(fs.readFileSync('conf/config.json')).dnsservers;
+  const conffile = JSON.parse(fs.readFileSync('conf/config.json'));
 } catch (e) {
   console.log(e);
 }
+
+const allowedips = conffile.allowedips;
+const dnsservers = conffile.dnsservers;
 
 process.env['NODE_TLS_REJECT_UNAUTHORIZED']='0';
 
