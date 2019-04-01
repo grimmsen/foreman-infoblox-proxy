@@ -9,6 +9,7 @@ const extend=require("extend");
 
 const mojosecret = JSON.parse(fs.readFileSync('conf/config.json')).mojosecret;
 const allowedips = JSON.parse(fs.readFileSync('conf/config.json')).allowedips;
+const dnsservers = JSON.parse(fs.readFileSync('conf/config.json')).dnsservers;
 
 process.env['NODE_TLS_REJECT_UNAUTHORIZED']='0';
 
@@ -28,7 +29,7 @@ app.use(function (req,res,next) {
 const _dhcp = require('./lib/dhcp.js');
 const dhcp = new _dhcp();
 const _dns = require('./lib/dns.js');
-const dns = new _dns();
+const dns = new _dns(dnsservers);
 
 app.route('/features')
   .get(function (req,res) {

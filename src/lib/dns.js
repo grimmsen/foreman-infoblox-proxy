@@ -4,9 +4,10 @@ const request = require('request');
 const dnshelper = require('dns');
 const fs = require('fs');
 
-var dns = function() {
+var dns = function(dnsservers) {
     var infoblox = new _infoblox();
     var util = new _util();
+    var dnsservers = dnsservers;
     this.create = function(req,res) {
         if(req.body.type==='PTR') {
             if(!util.is_fqdn(req.body.fqdn)||!util.is_ptr(req.body.value)) {
@@ -92,7 +93,6 @@ var dns = function() {
         infoblox.request('network','GET',{'comment:~':req.params.networkname},[],function(data) {
             if(data[0] !== undefined) {
                 // CALLBACK HELL!!!
-                var dnsservers=JSON.parse(fs.readFileSync('conf/config.json')).dnsservers;
                 if(dnsservers!==undefined) { dnshelper.setServers(dnsservers); console.log("Using "+dnsservers+" for resolving...");
                 dnshelper.resolve(req.params.value,function(err,records) {
                     if(records!==undefined) {
