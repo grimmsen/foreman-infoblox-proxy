@@ -2,6 +2,7 @@ const _infoblox = require('./infoblox.js');
 const _util = require('./util.js');
 const request = require('request');
 const dnshelper = require('dns');
+const fs = require('fs');
 
 var dns = function() {
     var infoblox = new _infoblox();
