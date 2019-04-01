@@ -7,9 +7,12 @@ const fs=require("fs");
 const https=require("https");
 const extend=require("extend");
 
-const mojosecret = JSON.parse(fs.readFileSync('conf/config.json')).mojosecret;
-const allowedips = JSON.parse(fs.readFileSync('conf/config.json')).allowedips;
-const dnsservers = JSON.parse(fs.readFileSync('conf/config.json')).dnsservers;
+try {
+  const allowedips = JSON.parse(fs.readFileSync('conf/config.json')).allowedips;
+  const dnsservers = JSON.parse(fs.readFileSync('conf/config.json')).dnsservers;
+catch (e) {
+  console.log(e);
+}
 
 process.env['NODE_TLS_REJECT_UNAUTHORIZED']='0';
 
