@@ -91,6 +91,8 @@ var dns = function() {
         infoblox.request('network','GET',{'comment:~':req.params.networkname},[],function(data) {
             if(data[0] !== undefined) {
                 // CALLBACK HELL!!!
+                var dnsservers=JSON.parse(fs.readFileSync('conf/config.json')).dnsservers;
+                if(dnsservers!==undefined) dnshelper.setServers(dnsservers);
                 dnshelper.resolve(req.params.value,function(err,records) {
                     if(records!==undefined) {
                         res.send(records[0]).end();
