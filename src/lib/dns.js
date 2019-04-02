@@ -104,10 +104,12 @@ var dns = function(dnsservers) {
                     if(records!==undefined) {
                         res.send(records[0]).end();
                         return;
-                    }  else {
+                    } else {
                         res.status(500).send("ERR no such host").end();
                     }
                 });
+            } else {
+              res.status(500).send("ERR no such network").end();
             }
         });
     }
