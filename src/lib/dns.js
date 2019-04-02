@@ -89,6 +89,29 @@ var dns = function(dnsservers) {
         res.status(500).end();
     }
 
+  // noop clone of autocreate
+    this.autocreate_noop = function(req,res) {
+        infoblox.request('network','GET',{'comment:~':req.params.networkname},[],function(data) {
+            if(data[0] !== undefined) {
+                // CALLBACK HELL!!!
+                // check cache
+                if(dnscache[req.params.value]!==undefined) {
+                  res.send(dnscache[req.params.value]).end();
+                  return;
+                }
+                if(dnsservers!==undefined) { dnshelper.setServers(dnsservers); console.log("Using "+dnsservers+" for resolving..."); }
+                dnshelper.resolve(req.params.value,function(err,records) {
+                    if(records!==undefined) {
+                        res.send(records[0]).end();
+                        return;
+                    }  else {
+                        res.status(500).send("ERR no such host").end();
+                    }
+                }
+            }
+        }
+    }
+
     // convinience function for simplified creation of host entries for hosts not managed by foreman
     this.autocreate = function(req,res) {
         infoblox.request('network','GET',{'comment:~':req.params.networkname},[],function(data) {
