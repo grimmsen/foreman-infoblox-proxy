@@ -113,20 +113,20 @@ var dns = function(dnsservers) {
                                 // create A record
                                 request.post('http://localhost:8080/dns',{form:{fqdn:req.params.value,value:ip,type:'A'}},function(err,response,body) {
                                     if(err) {
-                                        res.status(500).send('error on reservation');
+                                        res.status(500).send('ERR error on reservation');
                                         return;
                                     }
                                     dnscache[req.params.value]=ip;
                                     res.status(200).send(ip);
                                 });
                             } catch (e) {
-                                res.status(500).send('invalid data from ipam'+e).end();
+                                res.status(500).send('ERR invalid data from ipam'+e).end();
                             }
                         });
                     }
                 });
             } else {
-                res.status(500).send("no such network").end();
+                res.status(500).send("ERR no such network").end();
             }
         });
     }
