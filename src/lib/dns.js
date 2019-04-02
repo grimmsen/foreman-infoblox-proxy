@@ -107,9 +107,9 @@ var dns = function(dnsservers) {
                     }  else {
                         res.status(500).send("ERR no such host").end();
                     }
-                }
+                });
             }
-        }
+        });
     }
 
     // convinience function for simplified creation of host entries for hosts not managed by foreman
