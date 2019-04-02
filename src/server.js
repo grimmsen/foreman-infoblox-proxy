@@ -70,6 +70,7 @@ app.route('/dns/:value/A')
 
 app.route('/auto/:networkname/:value')
   .put(dns.autocreate)
+  .get(dns.autocreate_noop)
   .delete(dns.deleteA);
 
 console.log("starting up....");
