@@ -46,9 +46,9 @@ var dhcp = function() {
                 candidates.push(data[c].ip_address);
             }
             // with shuffle
-            response = [{
+            response = {
                 ip: candidates[Math.floor(Math.random()*candidates.length)]
-            }];
+            };
             res.send(response).end();
         });
     }
