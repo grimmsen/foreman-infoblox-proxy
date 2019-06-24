@@ -102,9 +102,11 @@ var dns = function(dnsservers) {
                 if(dnsservers!==undefined) { dnshelper.setServers(dnsservers); console.log("Using "+dnsservers+" for resolving..."); }
                 dnshelper.resolve(req.params.value,function(err,records) {
                     if(records!==undefined) {
+                        dnscache[req.params.value] = records[0];
                         res.send(records[0]).end();
                         return;
                     } else {
+                      dnscache[req.params.value] = undefined;
                         // find unused ip
                         request('http://localhost:8080/dhcp/'+data[0].network.split('/')[0]+'/unused_ip',function(err,response,body) {
                             try {
