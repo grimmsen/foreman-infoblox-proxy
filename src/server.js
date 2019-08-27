@@ -73,7 +73,7 @@ app.route('/auto/:networkname/:value')
   .get(dns.autocreate_noop)
   .delete(dns.deleteA);
 
-app.route('dns/clearcache')
+app.route('/dns/clearcache')
   .get(dns.clear_cache);
 
 console.log("starting up....");
