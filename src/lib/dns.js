@@ -8,7 +8,7 @@ var dns = function(dnsservers) {
     var infoblox = new _infoblox();
     var util = new _util();
     var dnsservers = dnsservers;
-    var dnscache = {};
+    this.dnscache = {};
     this.create = function(req,res) {
         if(req.body.type==='PTR') {
             if(!util.is_fqdn(req.body.fqdn)||!util.is_ptr(req.body.value)) {
