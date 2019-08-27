@@ -8,7 +8,7 @@ var dns = function(dnsservers) {
     var infoblox = new _infoblox();
     var util = new _util();
     var dnsservers = dnsservers;
-    var dnscache = {};
+    var _dnscache = {};
     this.create = function(req,res) {
         if(req.body.type==='PTR') {
             if(!util.is_fqdn(req.body.fqdn)||!util.is_ptr(req.body.value)) {
@@ -91,6 +91,8 @@ var dns = function(dnsservers) {
 
   // noop clone of autocreate
     this.autocreate_noop = function(req,res) {
+        _dnscache = dnscache;
+        console.log(dnscache);
         infoblox.request('network','GET',{'comment:~':req.params.networkname},[],function(data) {
             if(data[0] !== undefined) {
                 // CALLBACK HELL!!!
@@ -115,13 +117,14 @@ var dns = function(dnsservers) {
     }
 
     this.clear_cache = function(req,res) {
-        var msg = {'msg':dnscache.length+' entries deleted from cache'}
-        dnscache.length = 0;
+        var msg = {'msg':_dnscache.length+' entries deleted from cache'}
+        _dnscache.length = 0;
         res.status(200).send(JSON.stringify(msg));
     }
 
     // convinience function for simplified creation of host entries for hosts not managed by foreman
     this.autocreate = function(req,res) {
+        _dnscache = dnscache;
         infoblox.request('network','GET',{'comment:~':req.params.networkname},[],function(data) {
             if(data[0] !== undefined) {
                 // CALLBACK HELL!!!

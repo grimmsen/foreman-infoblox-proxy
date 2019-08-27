@@ -29,7 +29,6 @@ const _dhcp = require('./lib/dhcp.js');
 const dhcp = new _dhcp();
 const _dns = require('./lib/dns.js');
 const dns = new _dns(dnsservers);
-dns.dnscache = {};
 
 app.route('/features')
   .get(function (req,res) {
