@@ -114,6 +114,12 @@ var dns = function(dnsservers) {
         });
     }
 
+    this.clear_cache = function(req,res) {
+        var msg = {'msg':dnscache.length+' entries deleted from cache'}
+        dnscache.length = 0;
+        res.status(200).send(JSON.stringify(msg));
+    }
+
     // convinience function for simplified creation of host entries for hosts not managed by foreman
     this.autocreate = function(req,res) {
         infoblox.request('network','GET',{'comment:~':req.params.networkname},[],function(data) {
