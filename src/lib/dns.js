@@ -98,6 +98,9 @@ var dns = function(dnsservers) {
         var that = this;
         console.log(this.dnscache);
         infoblox.request('network','GET',{'comment:~':req.params.networkname},[],function(data) {
+            if(that.dnscache===undefined) {
+                that.dnscache={};
+            }
             if(data[0] !== undefined) {
                 // CALLBACK HELL!!!
                 // check cache
@@ -105,7 +108,7 @@ var dns = function(dnsservers) {
                   res.send(that.dnscache[req.params.value]).end();
                   return;
                 }
-                if(this.dnsservers!==undefined) { dnshelper.setServers(dnsservers); console.log("Using "+dnsservers+" for resolving..."); }
+                if(dnsservers!==undefined) { dnshelper.setServers(dnsservers); console.log("Using "+dnsservers+" for resolving..."); }
                 dnshelper.resolve(req.params.value,function(err,records) {
                     if(records!==undefined) {
                         that.dnscache[req.params.value] = records[0];
