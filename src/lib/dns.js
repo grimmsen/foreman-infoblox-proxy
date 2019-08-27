@@ -95,8 +95,8 @@ var dns = function(dnsservers) {
             if(data[0] !== undefined) {
                 // CALLBACK HELL!!!
                 // check cache
-                if(dnscache[req.params.value]!==undefined) {
-                  res.send(dnscache[req.params.value]).end();
+                if(this.dnscache[req.params.value]!==undefined) {
+                  res.send(this.dnscache[req.params.value]).end();
                   return;
                 }
                 if(dnsservers!==undefined) { dnshelper.setServers(dnsservers); console.log("Using "+dnsservers+" for resolving..."); }
@@ -115,8 +115,8 @@ var dns = function(dnsservers) {
     }
 
     this.clear_cache = function(req,res) {
-        var msg = {'msg':dnscache.length+' entries deleted from cache'}
-        dnscache.length = 0;
+        var msg = {'msg':this.dnscache.length+' entries deleted from cache'}
+        this.dnscache.length = 0;
         res.status(200).send(JSON.stringify(msg));
     }
 
@@ -126,18 +126,18 @@ var dns = function(dnsservers) {
             if(data[0] !== undefined) {
                 // CALLBACK HELL!!!
                 // check cache
-                if(dnscache[req.params.value]!==undefined) {
-                  res.send(dnscache[req.params.value]).end();
+                if(this.dnscache[req.params.value]!==undefined) {
+                  res.send(this.dnscache[req.params.value]).end();
                   return;
                 }
                 if(dnsservers!==undefined) { dnshelper.setServers(dnsservers); console.log("Using "+dnsservers+" for resolving..."); }
                 dnshelper.resolve(req.params.value,function(err,records) {
                     if(records!==undefined) {
-                        dnscache[req.params.value] = records[0];
+                        this.dnscache[req.params.value] = records[0];
                         res.send(records[0]).end();
                         return;
                     } else {
-                      dnscache[req.params.value] = undefined;
+                      this.dnscache[req.params.value] = undefined;
                         // find unused ip
                         request('http://localhost:8080/dhcp/'+data[0].network.split('/')[0]+'/unused_ip',function(err,response,body) {
                             try {
@@ -149,7 +149,7 @@ var dns = function(dnsservers) {
                                         res.status(500).send('ERR error on reservation');
                                         return;
                                     }
-                                    dnscache[req.params.value]=ip;
+                                    this.dnscache[req.params.value]=ip;
                                     res.status(200).send(ip);
                                 });
                             } catch (e) {
