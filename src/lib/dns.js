@@ -126,8 +126,8 @@ var dns = function(dnsservers) {
 
     this.clear_cache = function(req,res) {
         console.log(this.dnscache)
-        var msg = {'msg':this.dnscache.length+' entries deleted from cache'}
-        this.dnscache.length = 0;
+        var msg = {'msg':Object.keys(this.dnscache).length+' entries deleted from cache'}
+        this.dnscache = {};
         res.status(200).send(JSON.stringify(msg));
     }
 
