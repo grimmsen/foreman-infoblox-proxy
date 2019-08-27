@@ -8,7 +8,7 @@ var dns = function(dnsservers) {
     var infoblox = new _infoblox();
     var util = new _util();
     var dnsservers = dnsservers;
-    this.dnscache = {};
+    var dnscache = {};
     this.create = function(req,res) {
         if(req.body.type==='PTR') {
             if(!util.is_fqdn(req.body.fqdn)||!util.is_ptr(req.body.value)) {
@@ -91,13 +91,12 @@ var dns = function(dnsservers) {
 
   // noop clone of autocreate
     this.autocreate_noop = function(req,res) {
-        that = this;
         infoblox.request('network','GET',{'comment:~':req.params.networkname},[],function(data) {
             if(data[0] !== undefined) {
                 // CALLBACK HELL!!!
                 // check cache
-                if(that.dnscache[req.params.value]!==undefined) {
-                  res.send(that.dnscache[req.params.value]).end();
+                if(dnscache[req.params.value]!==undefined) {
+                  res.send(dnscache[req.params.value]).end();
                   return;
                 }
                 if(dnsservers!==undefined) { dnshelper.setServers(dnsservers); console.log("Using "+dnsservers+" for resolving..."); }
@@ -116,31 +115,29 @@ var dns = function(dnsservers) {
     }
 
     this.clear_cache = function(req,res) {
-        var that = this;
-        var msg = {'msg':that.dnscache.length+' entries deleted from cache'}
-        that.dnscache.length = 0;
+        var msg = {'msg':dnscache.length+' entries deleted from cache'}
+        dnscache.length = 0;
         res.status(200).send(JSON.stringify(msg));
     }
 
     // convinience function for simplified creation of host entries for hosts not managed by foreman
     this.autocreate = function(req,res) {
-        var that = this;
         infoblox.request('network','GET',{'comment:~':req.params.networkname},[],function(data) {
             if(data[0] !== undefined) {
                 // CALLBACK HELL!!!
                 // check cache
-                if(that.dnscache[req.params.value]!==undefined) {
-                  res.send(that.dnscache[req.params.value]).end();
+                if(dnscache[req.params.value]!==undefined) {
+                  res.send(dnscache[req.params.value]).end();
                   return;
                 }
                 if(dnsservers!==undefined) { dnshelper.setServers(dnsservers); console.log("Using "+dnsservers+" for resolving..."); }
                 dnshelper.resolve(req.params.value,function(err,records) {
                     if(records!==undefined) {
-                        that.dnscache[req.params.value] = records[0];
+                        dnscache[req.params.value] = records[0];
                         res.send(records[0]).end();
                         return;
                     } else {
-                      that.dnscache[req.params.value] = undefined;
+                      dnscache[req.params.value] = undefined;
                         // find unused ip
                         request('http://localhost:8080/dhcp/'+data[0].network.split('/')[0]+'/unused_ip',function(err,response,body) {
                             try {
@@ -152,7 +149,7 @@ var dns = function(dnsservers) {
                                         res.status(500).send('ERR error on reservation');
                                         return;
                                     }
-                                    that.dnscache[req.params.value]=ip;
+                                    dnscache[req.params.value]=ip;
                                     res.status(200).send(ip);
                                 });
                             } catch (e) {
