@@ -29,7 +29,6 @@ const _dhcp = require('./lib/dhcp.js');
 const dhcp = new _dhcp();
 const _dns = require('./lib/dns.js');
 const dns = new _dns(dnsservers);
-dns.constructor();
 
 app.route('/features')
   .get(function (req,res) {
@@ -73,9 +72,6 @@ app.route('/auto/:networkname/:value')
   .put(dns.autocreate)
   .get(dns.autocreate_noop)
   .delete(dns.deleteA);
-
-app.route('/dns/clearcache')
-  .get(dns.clear_cache);
 
 console.log("starting up....");
 try {
