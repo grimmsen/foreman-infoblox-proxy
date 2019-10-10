@@ -38,6 +38,10 @@ var dns = function(dnsservers) {
     }
 
     this.deleteA = function(req,res) {
+        if(fs.existsSync('conf/deleteA.js')) {
+          const func = require('../conf/deleteA.js');
+          func.hook(req.params.value);
+        }
         if(util.is_fqdn(req.params.value)) {
             infoblox.request('record:a','GET',{name:req.params.value},[],function(data) {
                 for(var c=0; c<data.length; c++) {
@@ -82,7 +86,7 @@ var dns = function(dnsservers) {
                         });
                     }
                 }
-                res.status(200).end(); return; 
+                res.status(200).end(); return;
             });
             return;
         }
