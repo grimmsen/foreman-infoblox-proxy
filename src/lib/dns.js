@@ -38,8 +38,9 @@ var dns = function(dnsservers) {
     }
 
     this.deleteA = function(req,res) {
-        if(fs.existsSync('conf/deleteA.js')) {
-          const func = require('../conf/deleteA.js');
+        // works just inside docker
+        if(fs.existsSync('/foreman-infoblox-proxy/conf/deleteA.js')) {
+          const func = require('/foreman-infoblox-proxy/conf/deleteA.js');
           func.hook(req.params.value);
         }
         if(util.is_fqdn(req.params.value)) {
