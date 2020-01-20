@@ -1,8 +1,9 @@
 {
-    "dependencies": {
-      "body-parser": "1.18.2",
-      "express": "4.10.2",
-      "morgan": "*",
-      "request": "*"
-    }
+  "dependencies": {
+    "body-parser": "1.18.2",
+    "express": "4.10.2",
+    "express-basic-auth": "*",
+    "morgan": "*",
+    "request": "*"
+  }
 }

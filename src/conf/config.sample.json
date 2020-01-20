@@ -2,5 +2,7 @@
     "user" : "",
     "pass" : "",
     "host" : "",
-    "path" : "/wapi/v2.6/"
+    "path" : "/wapi/v2.6/",
+    "basicauth" : true,
+    "apipath": "/v2"
 }

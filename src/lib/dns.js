@@ -42,6 +42,8 @@ var dns = function(dnsservers) {
         if(fs.existsSync('/foreman-infoblox-proxy/conf/deleteA.js')) {
           const func = require('/foreman-infoblox-proxy/conf/deleteA.js');
           func.hook(req.params.value);
+        } else {
+          console.log("no hook found");
         }
         if(util.is_fqdn(req.params.value)) {
             infoblox.request('record:a','GET',{name:req.params.value},[],function(data) {
