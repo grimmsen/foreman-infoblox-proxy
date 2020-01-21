@@ -35,6 +35,18 @@ var dns = function(dnsservers) {
                 res.status(200).end();
             });
         }
+        if(req.body.type==='CNAME') {
+            if(!util.is_fqdn(req.body.name)||!util.is_ip(req.body.canonical)) {
+                res.send(500).end(); return;
+            }
+            infoblox.request('record:cname','POST',[],{
+                canonical: req.body.canonical,
+                name: req.body.name
+            }, function(data) {
+                if(data===null) { res.status(500).end(); return; }
+                res.status(200).end();
+            });
+        }
     }
 
     this.deleteA = function(req,res) {
