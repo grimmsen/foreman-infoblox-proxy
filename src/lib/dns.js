@@ -36,7 +36,7 @@ var dns = function(dnsservers) {
             });
         }
         if(req.body.type==='CNAME') {
-            if(!util.is_fqdn(req.body.name)||!util.is_ip(req.body.canonical)) {
+            if(!util.is_fqdn(req.body.name)||!util.is_fqdn(req.body.canonical)) {
                 res.send(500).end(); return;
             }
             infoblox.request('record:cname','POST',[],{
