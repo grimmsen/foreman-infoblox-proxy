@@ -1,4 +1,4 @@
-// created by andreas 2017-07-28
+// cr1.20.0eated by andreas 2017-07-28
 //
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -14,6 +14,7 @@ const apipath = JSON.parse(fs.readFileSync('conf/config.json')).apipath;
 const basicauth = JSON.parse(fs.readFileSync('conf/config.json')).basicauth;
 const user = JSON.parse(fs.readFileSync('conf/config.json')).user;
 const pass = JSON.parse(fs.readFileSync('conf/config.json')).pass;
+const appversion = JSON.parse(fs.readFileSync('conf/config.json')).appversion;
 
 process.env['NODE_TLS_REJECT_UNAUTHORIZED']='0';
 
@@ -44,7 +45,7 @@ app.route('/features')
 
 app.route('/version')
   .get(auth(false),function(req,res) {
-    res.send('{"version":"1.20.0","modules":{"dns":"1.20.0","dhcp":"1.20.0"}}').end();
+    res.send('{"version":"'+appversion+'","modules":{"dns":"'+appversion+'","dhcp":"'+appversion+'"}}').end();
   });
 
 // old foreman

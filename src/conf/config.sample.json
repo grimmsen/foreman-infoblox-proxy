@@ -4,5 +4,6 @@
     "host" : "",
     "path" : "/wapi/v2.6/",
     "basicauth" : true,
-    "apipath": "/v2"
+    "apipath": "/v2",
+    "appversion": "1.20.0"
 }
