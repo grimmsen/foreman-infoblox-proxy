@@ -24,7 +24,6 @@ function auth(on) {
     users[user]=pass;
     return basicAuth({users:users});
   } else {
-    console.log('open');
     return function(req,res,next) { next(); };
   }
 }
@@ -38,6 +37,51 @@ const dhcp = new _dhcp();
 const _dns = require('./lib/dns.js');
 const dns = new _dns(dnsservers);
 
+app.route('/features')
+  .get(auth(false),function (req,res) {
+    res.send('["dhcp","dns"]').end();
+  });
+
+app.route('/version')
+  .get(auth(false),function(req,res) {
+    res.send('{"version":"1.20.0","modules":{"dns":"1.20.0","dhcp":"1.20.0"}}').end();
+  });
+
+// old foreman
+app.route('/dhcp')
+  .get(auth(true),dhcp.dhcp);
+
+app.route('/dhcp/:network/unused_ip')
+  .get(auth(true),dhcp.unused_ip);
+
+app.route('/dhcp/:network/:ip')
+  .get(auth(true),dhcp.reservation_info);
+
+app.route('/dhcp/:network/mac/:mac')
+  .get(auth(true),dhcp.search_mac)
+  .delete(auth(true),dhcp.delete_reservation);
+
+app.route('/dhcp/:network/ip/:ip')
+  .get(auth(true),dhcp.search_ip)
+
+app.route('/dhcp/:network')
+  .post(auth(true),dhcp.create_reservation);
+
+app.route('/dns')
+  .post(auth(true),dns.create);
+
+app.route('/dns/:value')
+  .delete(auth(true),dns.delete);
+
+app.route('/dns/:value/A')
+  .delete(auth(true),dns.deleteA);
+
+app.route('/auto/:networkname/:value')
+  .put(auth(true),dns.autocreate)
+  .get(auth(true),dns.autocreate_noop)
+  .delete(auth(true),dns.deleteA);
+
+// new foreman
 app.route(apipath+'/features')
   .get(auth(false),function (req,res) {
     res.send('["dhcp","dns"]').end();
